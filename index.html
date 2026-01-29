@@ -148,8 +148,10 @@
                
                 <div class="checkbox">
 
-                    <label class="titulos"><input type="checkbox" id="txtPoliticas">Acepto las Políticas de Protección de Datos Personales y Atención en Consulta Externa </label>
+                    <label class="titulos" id="titulo-politicas"><input type="checkbox" id="txtPoliticas">Acepto las Políticas de Protección de Datos Personales y Atención en Consulta Externa </label>
+                    
                 </div>
+                <div id="politicas"></div>
                 
             </div>
 
@@ -746,11 +748,37 @@
 
     document.getElementById("txtPoliticas").addEventListener("change",(e)=>{
          
+        
         if(e.target.checked){
+              window.alert("Por fabor leer las politicas")
               window.open("https://clinicalosfresnos.com.pe/politicas/")
         }
        
     })
+
+    document.getElementById("titulo-politicas").addEventListener("mouseenter",function(e){
+
+        const mensaje=document.createElement("div")
+        mensaje.classList.add("mensaje-politicas")
+        mensaje.textContent="Por fabor leer nuestras politicas"
+        
+        mensaje.id="mensaje-politicas"
+        document.getElementById("politicas").appendChild(mensaje)
+        const rect = mensaje.getBoundingClientRect();
+        mensaje.style.left = rect.left + "px";
+        mensaje.style.top = (rect.bottom + 5) + "px";
+        e.preventDefault();
+    })
+     document.getElementById("titulo-politicas").addEventListener("mouseleave",function(e){
+
+        var popupPoliticas=document.getElementById("mensaje-politicas");
+        if(popupPoliticas) {
+           popupPoliticas.remove();
+        }
+        e.preventDefault();
+    })
+
+   
 
     </script>
     

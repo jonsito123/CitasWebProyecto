@@ -40,3 +40,28 @@
 }
 
 /* Hover y focus */
+
+
+/*poltiicas*/
+
+.mensaje-politicas{
+    position: absolute;
+    background-color: #F9F3D6;
+    border-radius: 2px solid;
+    color:#6B4423;
+    padding: 5px 10px;
+
+    font-size: 14px;
+    z-index: 1000;
+    white-space: nowrap;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.mensaje-politicas::before {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    left: 10px;
+    border: 5px solid transparent;
+    border-bottom-color: #333;
+}
