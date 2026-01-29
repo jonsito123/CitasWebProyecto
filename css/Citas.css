@@ -1,0 +1,165 @@
+.schedule-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+
+}
+
+.doctor-horarios{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 25px;
+}
+
+.horario-card {
+  background: white;
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.horario-header{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+ .horario-icon {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    color: white;
+    flex-shrink: 0;
+}
+
+.doctorHorario-info h3 {
+    color: #2d3748;
+    font-size: 1.1em;
+    margin-bottom: 5px;
+    line-height: 1.3;
+}
+.Horario-card-body {
+  margin: 20px 0;
+}
+
+ .infoHorario {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    color: #4a5568;
+}
+
+
+.infoHorario svg {
+    width: 20px;
+    height: 20px;
+    color: #667eea;
+    flex-shrink: 0;
+}
+
+.info-row span {
+    font-size: 0.95em;
+}
+
+.availability {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #f0fdf4;
+    color:#16a34a;
+    padding: 8px 15px;
+    border-radius: 10px;
+    font-size: 0.9em;
+    font-weight: 600;
+    margin-top: 15px;
+}
+
+.availability::before {
+    content: '✓';
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    background: #16a34a;
+    color: white;
+    border-radius: 50%;
+    font-size: 12px;
+}
+
+.pocasCitas {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background:#f0fdf4;
+    color: red;
+    padding: 8px 15px;
+    border-radius: 10px;
+    font-size: 0.9em;
+    font-weight: 600;
+    margin-top: 15px;
+}
+
+.pocasCItas::before {
+    content: '✓';
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    background:#56565f;
+    color: white;
+    border-radius: 50%;
+    font-size: 12px;
+}
+
+.cardHorario-footer {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.btn {
+    width: 100%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: scale(1.02);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.8em;
+    }
+
+    .cards-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+

@@ -1,0 +1,819 @@
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Admistrativo</title> 
+        <link href="../css/Modal.css" rel="stylesheet">
+        <link href="../css/Footer.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" />
+        <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+		<!-- Favicon / App icon (local copy) -->
+        <link rel="icon" href="assets/images/iconoCLF.png" type="image/png">
+        <link rel="apple-touch-icon" href="assets/images/iconoCLF.png">
+    <style>
+        body {
+            background:#fff;
+            min-height: 100vh;
+            padding: 40px 0 80px 0;
+        }
+        .vista {
+            display: none;
+        }
+        .vista.activar{
+            display: block;
+        }
+        /*vista login*/
+        .login-card {
+            border: 2px solid hsla(0, 0%, 1%, 0.226);
+            box-shadow: 0 4px 6px rgba(15, 15, 15, 0.08);
+        }
+        a{
+            text-decoration: none;
+            border: 1px solid black;
+        }
+        .search-box:focus {
+            outline: none !important;
+            box-shadow: none !important;
+            border-color: #ced4da !important; /* Color del borde normal */
+        }
+        .titulo-header{
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            
+        }
+    </style>
+</head>
+<body>
+
+<div class="modal fade" id="modalMedico">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            
+            <div class="modal-header">
+                <h5 class="modal-title">Editar Médico y Horarios</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            
+            <div class="modal-body">
+                <form>
+                    <div class="row">
+                        <div class="col-md-10 mb-3">
+                            <label class="form-label">NOMBRE COMPLETO</label>
+                            <input type="text" class="form-control" id="txtMedico">
+                        </div>
+                        
+                       
+                    </div>
+                    
+                    <div class="row">                       
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Horario de Atencion</label>
+                            <input type="date" class="form-control" id="txtHorarioAtencion">
+                        </div>
+                        <input type="hidden" id="txtIdHorario">
+                    </div>
+                    
+                    <hr>
+                    
+                    <h6 class="mb-3">⏰ Configuración de Horario y Cupos</h6>
+                    
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">HORA INICIO</label>
+                            <input type="time" class="form-control"  id="txtHorarioInicio">
+                        </div>
+                        
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">HORA FIN</label>
+                            <input type="time" class="form-control"  id="txtHoraFin">
+                        </div>
+                        
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">CUPOS DIARIOS</label>
+                            <input type="number" class="form-control" id="txtCupos">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-primary" onclick="GuardarCambios(event)">Guardar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+      
+            
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalHorario">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            
+            <div class="modal-header">
+                <h5 class="modal-title">Registro de Horario Médico</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            
+            <div class="modal-body">
+                <form id="horarioForm">
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label" for="especialidad">Especialidad</label>
+                            <select class="form-select" id="especialidad" name="especialidad" required onchange="seleccionarMedico(event)">
+                              
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 mb-3" for="cbMedicos">
+                            <label class="form-label" for="cbMedicos">Medicos</label>
+                            <select class="form-select" id="cbMedicos" name="cbMedicos" required>
+                              
+                            </select>
+                        </div>
+                    </div>
+                      <div class="row">
+                       <div class="col-md-12 mb-3">
+                            <label class="form-label" for="fechaAtencion">Fecha Atencion :</label>
+                            <input type="date" class="form-control" name="fechaAtencion" id="fechaAtencion" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                       <div class="col-md-12 mb-3">
+                            <label class="form-label" for="Cupos">Cupos</label>
+                            <input type="number" class="form-control" name="Cupos" id="Cupos" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                       <div class="col-md-6 mb-3">
+                            <label class="form-label" for="horaInicio">Hora Inicio:</label>
+                            <input type="time" class="form-control" name="fechaAtencion" id="horaInicio" required>
+                        </div>
+                         <div class="col-md-6 mb-3">
+                            <label class="form-label" for="horaFin">Hora Fin:</label>
+                            <input type="time" class="form-control" name="fechaAtencion" id="horaFin" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer d-flex justify-content-center">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" onclick="CrearHorarioMedico(event)">Crear Horario</button>
+                    </div>
+                    
+                </form>
+            </div>  
+            
+          
+            
+        </div>
+    </div>
+</div>
+
+<div class="vista" id="login-vista">
+       <div class="container text-dark vh-100">
+        <div class="row h-100 justify-content-center align-items-center">
+            <div class="col-lg-5 col-md-8">
+                <div class="login-card p-5 rounded-4">
+                    <h4 class="mb-4 text-dark text-center text-uppercase">Acceso Administrativo</h4>
+                    <form action id="frmLogin">
+                        <div class="mb-4">
+                            <span class="mb-2">USUARIO</span>
+                            <input type="text" class="form-control border-0" placeholder="👤 Ingrese Usuario" id="txtUsuario">
+                        </div>
+                        <div class="mb-4">
+                            <span class="mb-3">CONTRASEÑA</span>
+                            <input type="password" class="form-control border-0" placeholder="🔒 contraseña" id="txtPassword">
+                        </div>
+                        <div class="d-grid mb-2">
+                            <button type="submit" class="btn btn-primary btn-login rounded-3 fw-semibold">Ingresar</button>
+                        </div>
+                       
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="vista container" id="citas-vista">
+        <div class="main-card mx-auto" style="max-width: 1200px;">
+
+         
+            <!-- Header -->
+            <div class="header-section">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="titulo-header">
+                        <h2 class="mb-1">Panel de Administración</h2>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <a class="btn btn-success btn-sm" onclick="newNuevoHorario(event)">
+                            <i class="bi bi-plus-lg me-1"></i>Agregar Nuevo
+                        </a>
+                        <button class="btn btn-danger btn-sm" onclick="CerrarSesion()" title="Cerrar sesión" style="display: none;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                                <polyline points="16 17 21 12 16 7"/>
+                                <line x1="21" y1="12" x2="9" y2="12"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                
+            </div>
+
+            <!-- Filtro -->
+         
+
+            <!-- Tabla -->
+            <div class="table-responsive">
+                <table class="table ttable-striped table-hove" id="tablaRegistros">
+                    <thead class="table-light">
+                        <tr>
+                                <th scope="col" class="px-4 py-3 text-uppercase text-muted" style="font-size: 0.75rem; font-weight: 600;">Médico</th>
+                                <th scope="col" class="px-4 py-3 text-uppercase text-muted" style="font-size: 0.75rem; font-weight: 600;">Especialidad</th>
+                                <th scope="col" class="px-4 py-3 text-uppercase text-muted" style="font-size: 0.75rem; font-weight: 600;">Fecha Horario</th>
+                                <th scope="col" class="px-4 py-3 text-uppercase text-muted" style="font-size: 0.75rem; font-weight: 600;">Hora</th>
+                                <th scope="col" class="px-4 py-3 text-uppercase text-muted text-center" style="font-size: 0.75rem; font-weight: 600;">Cupos</th>
+                                <th scope="col" class="px-4 py-3 text-uppercase text-muted text-center" style="font-size: 0.75rem; font-weight: 600;">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody >
+                        
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Footer -->
+            
+        </div>
+</div>
+
+<script src="../js/Horario.js"></script>
+<script>
+
+     
+
+   /*variablesgloblaes*/
+ 
+   showView("login")
+  var valorHorario=null
+  
+  /* Variables para Polling */
+  var horariosAnterior = null;
+  var idIntervalPolling = null;
+  var pollingActivo = false;
+   
+    
+    /*login*/
+    /*var filtro=document.getElementById("searchInput");*/
+    document.getElementById("frmLogin").addEventListener("submit",(event)=>{
+       
+        var usuario=document.getElementById("txtUsuario").value;
+        var contraseña=document.getElementById("txtPassword").value;
+        
+         if(usuario="system" && contraseña=="1234"){
+            
+        
+            CargarHtmlHorarios()
+            showView("citas")
+         }
+         else {
+            alert("Incorrecta   ")
+         }
+
+        
+        
+        event.preventDefault();
+    })
+     
+    function showView(viewName) {
+
+            document.querySelectorAll('.vista').forEach(view => {
+                view.classList.remove('activar');
+            });
+            document.getElementById(`${viewName}-vista`).classList.add('activar');
+            
+            // Detener polling si se va a login
+            if (viewName === 'login') {
+              DetenerPolling();
+            }
+    }
+
+
+    var resultadosHorariosMedicos=null;
+    async function ObtenerCitas(){
+
+        const data=await fetch("https://api-rest-ventas.onrender.com/api/Horarios");
+        const resultado=await data.json();
+        return resultado  
+    }
+
+var registroMedicosDatatable;
+    /*datatables*/
+    
+   async function CargarHtmlHorarios(){
+
+      if ($.fn.DataTable.isDataTable('#tablaRegistros')) {
+      $('#tablaRegistros').DataTable().destroy();
+      }
+     /*quitar la refewrencia al datable*/
+
+      /* var search=filtro.value;*/
+       var registroHorarios=await ObtenerCitas();
+       var horariosMedicos=document.querySelector("#tablaRegistros tbody")
+
+
+     var registrosHorariosFinal=registroHorarios
+       /*var registrosHorariosFinal=registroHorarios.filter((horario)=>{
+         if(search==="") {
+            return horario
+         }else if(horario.Medico.toLowerCase().includes(search.toLowerCase())){
+            return horario
+
+         }
+
+       })*/
+       
+       /*actualñziar*/
+      registrosHorariosFinal=registrosHorariosFinal.map((horario)=>
+       ({ ...horario,FechaHorario:horario.FechaHorario.split("T")[0] }))
+
+      
+       if(registrosHorariosFinal.length>0) {
+       horariosMedicos.innerHTML=""
+         
+   
+       let dataInnerHtml=registrosHorariosFinal.map((horario)=>{
+
+
+        var HorarioInicio=horario.HoraInicio.split(":")
+        var [HoraInicioHora,HoraInicioMinutos]=HorarioInicio
+        var HoraInicio=`${HoraInicioHora}:${HoraInicioMinutos}`
+        var HoraInicioAMPM=HoraInicioHora>=12? "PM":"AM"
+
+         var HorarioFin=horario.HoraFin.split(":")
+        var [HoraFinHora,HoraFinMinutos]=HorarioFin
+        var HorarioFin=`${HoraFinHora}:${HoraFinMinutos}`
+        var HoraFinAMPM=HoraFinHora>=12? "PM":"AM"
+       
+           return `
+           <tr>
+                <td class="px-4 py-3">
+                <div class="d-flex align-items-center">
+                    <div class="doctor-avatar me-3">
+                        <i class="bi bi-person-fill"></i>
+                    </div>
+                    <div>
+                        <div class="fw-semibold">Dr. ${horario.Medico}</div>
+                        <small class="text-muted">CMP: ${horario.CMP}</small>
+                    </div>
+                </div>
+            </td>
+            <td class="px-4 py-3">
+                <span class="badge badge-specialty" style="background-color: #e7f0ff; color: #2563eb;">${horario.Especialidad}</span>
+            </td>
+            
+            <td class="px-4 py-3">${horario.FechaHorario.split("-").reverse().join("-")}</td>
+            <td class="px-4 py-3">${HoraInicio} ${HoraInicioAMPM}-${HorarioFin}${HoraFinAMPM}</td>
+            <td class="px-4 py-3 text-center">
+                <span class="badge bg-success px-3 py-2">${horario.Cupos}</span>
+            </td>
+            <td class="px-4 py-3 text-center">
+                <button class="btn btn-sm btn-outline-primary me-1" onclick="EditarCampos(${horario.id_Horario})">
+                  Editar
+                </button>
+            </td>
+            </tr>
+           `
+       }).join("");
+
+       horariosMedicos.innerHTML=dataInnerHtml
+       registroMedicosDatatable= $('#tablaRegistros').DataTable({
+            lengthMenu: [10, 15],
+            language: {
+                "sProcessing":     "Procesando...",
+                "sLengthMenu":     "Mostrar _MENU_ registros",
+                "sZeroRecords":    "No se encontraron resultados",
+                "sEmptyTable":     "Ningún dato disponible en esta tabla",
+                "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+                "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+                "sInfoPostFix":    "",
+                "sSearch":         "Buscar:",
+                "sUrl":            "",
+                "sInfoThousands":  ",",
+                "sLoadingRecords": "Cargando...",
+                "oPaginate": {
+                    "sFirst":    "Primero",
+                    "sLast":     "Último",
+                    "sNext":     "Siguiente",
+                    "sPrevious": "Anterior"
+                },
+                "oAria": {
+                    "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+                    "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                }
+            }
+        });
+ 
+    
+       
+     }
+     else {
+        horariosMedicos.innerHTML="<h3>No se encontraron médicos </h3>"
+     }
+
+    // Iniciar polling automático
+    IniciarPolling();
+    
+    // Mostrar botón de logout al iniciar sesión
+    const btnLogout = document.querySelector('button[onclick="CerrarSesion()"]');
+    if (btnLogout) {
+      btnLogout.style.display = 'block';
+    }
+    }
+
+  /* Función para iniciar el polling automático */
+  function IniciarPolling() {
+    if (pollingActivo) return; // Evitar múltiples polls
+    
+    pollingActivo = true;
+    console.log("[Polling] Iniciado con intervalo de 2 segundos");
+    idIntervalPolling = setInterval(async () => {
+      await VerificarCambios();
+    }, 2000); // Verificar cada 2 segundos (más frecuente)
+  }
+
+  /* Función para detener el polling */
+  function DetenerPolling() {
+    if (idIntervalPolling) {
+      clearInterval(idIntervalPolling);
+      pollingActivo = false;
+      idIntervalPolling = null;
+    }
+  }
+
+  /* Función para cerrar sesión y refrescar la página */
+  function CerrarSesion() {
+    console.log("[CerrarSesion] Cerrando sesión");
+    DetenerPolling();
+    // Ocultar botón de logout
+    const btnLogout = document.querySelector('button[onclick="CerrarSesion()"]');
+    if (btnLogout) {
+      btnLogout.style.display = 'none';
+    }
+    alert("Sesión cerrada");
+    location.reload();
+  }
+
+  /* Función para verificar si hay cambios y actualizar en paralelo */
+  async function VerificarCambios() {
+    try {
+      // Verifica que la tabla exista
+      const tabla = document.querySelector("#tablaRegistros tbody");
+      if (!tabla) {
+        console.log("[Polling] Tabla no encontrada");
+        return;
+      }
+      
+      const data = await fetch("https://api-rest-ventas.onrender.com/api/Horarios");
+      const horariosNuevos = await data.json();
+      
+      console.log("[Polling] Verificando cambios. Nuevos:", horariosNuevos.length, "Anteriores:", horariosAnterior ? horariosAnterior.length : 0);
+      
+      // Comparar con los datos anteriores
+      if (horariosAnterior === null || horariosAnterior.length === 0) {
+        horariosAnterior = JSON.parse(JSON.stringify(horariosNuevos));
+        console.log("[Polling] Datos iniciales cargados:", horariosNuevos.length);
+        return;
+      }
+
+      // Detectar cambios (inserciones, actualizaciones, eliminaciones)
+      const cambios = DetectarCambios(horariosAnterior, horariosNuevos);
+      
+      console.log("[Polling] Cambios:", cambios.hay, cambios);
+      
+      if (cambios.hay) {
+        console.log("[Polling] Cambios detectados:", {
+          insertados: cambios.insertados.length,
+          actualizados: cambios.actualizados.length,
+          eliminados: cambios.eliminados.length
+        });
+        
+        // Actualizar los datos globales con copia profunda
+        horariosAnterior = JSON.parse(JSON.stringify(horariosNuevos));
+        
+        // Actualizar solo las filas afectadas en la tabla
+        ActualizarTablaSelectivamente(horariosNuevos, cambios);
+      }
+    } catch (error) {
+      console.error("[Polling] Error:", error);
+    }
+  }
+
+  /* Función para detectar cambios entre dos datasets */
+  function DetectarCambios(anterior, nuevo) {
+    const cambios = {
+      hay: false,
+      insertados: [],
+      actualizados: [],
+      eliminados: []
+    };
+
+    // Detectar nuevos registros e inserciones
+    nuevo.forEach(horarioNuevo => {
+      const existe = anterior.find(h => h.id_Horario === horarioNuevo.id_Horario);
+      if (!existe) {
+        cambios.insertados.push(horarioNuevo);
+        cambios.hay = true;
+        console.log("[DetectarCambios] Nuevo registro encontrado:", horarioNuevo.id_Horario);
+      } else {
+        // Detectar actualizaciones comparando campo por campo
+        let cambio = false;
+        if (existe.HoraInicio !== horarioNuevo.HoraInicio) { cambio = true; console.log("[DetectarCambios] Cambio en HoraInicio", existe.id_Horario); }
+        if (existe.HoraFin !== horarioNuevo.HoraFin) { cambio = true; console.log("[DetectarCambios] Cambio en HoraFin", existe.id_Horario); }
+        if (existe.Cupos !== horarioNuevo.Cupos) { cambio = true; console.log("[DetectarCambios] Cambio en Cupos", existe.id_Horario); }
+        if (existe.FechaHorario !== horarioNuevo.FechaHorario) { cambio = true; console.log("[DetectarCambios] Cambio en FechaHorario", existe.id_Horario); }
+        
+        if (cambio) {
+          cambios.actualizados.push(horarioNuevo);
+          cambios.hay = true;
+        }
+      }
+    });
+
+    // Detectar eliminados
+    anterior.forEach(horarioAnterior => {
+      const existe = nuevo.find(h => h.id_Horario === horarioAnterior.id_Horario);
+      if (!existe) {
+        cambios.eliminados.push(horarioAnterior);
+        cambios.hay = true;
+        console.log("[DetectarCambios] Registro eliminado:", horarioAnterior.id_Horario);
+      }
+    });
+
+    return cambios;
+  }
+
+  function ActualizarTablaSelectivamente(horarios, cambios) {
+    console.log("[Sync] Recargando tabla");
+    CargarHtmlHorarios();
+  }
+  function GenerarFilaHorario(horario) {
+    var HorarioInicio = horario.HoraInicio.split(":")
+    var [HoraInicioHora, HoraInicioMinutos] = HorarioInicio
+    var HoraInicio = `${HoraInicioHora}:${HoraInicioMinutos}`
+    var HoraInicioAMPM = HoraInicioHora >= 12 ? "PM" : "AM"
+
+    var HorarioFin = horario.HoraFin.split(":")
+    var [HoraFinHora, HoraFinMinutos] = HorarioFin
+    var HorarioFin = `${HoraFinHora}:${HoraFinMinutos}`
+    var HoraFinAMPM = HoraFinHora >= 12 ? "PM" : "AM"
+    
+    var fechaFormato = horario.FechaHorario.split("T")[0].split("-").reverse().join("-")
+
+    return `<tr data-id="${horario.id_Horario}">
+      <td class="px-4 py-3">
+        <div class="d-flex align-items-center">
+          <div class="doctor-avatar me-3"><i class="bi bi-person-fill"></i></div>
+          <div><div class="fw-semibold">Dr. ${horario.Medico}</div>
+          <small class="text-muted">CMP: ${horario.CMP}</small></div>
+        </div>
+      </td>
+      <td class="px-4 py-3"><span class="badge badge-specialty" style="background-color: #e7f0ff; color: #2563eb;">${horario.Especialidad}</span></td>
+      <td class="px-4 py-3">${fechaFormato}</td>
+      <td class="px-4 py-3">${HoraInicio} ${HoraInicioAMPM}-${HorarioFin}${HoraFinAMPM}</td>
+      <td class="px-4 py-3 text-center"><span class="badge bg-success px-3 py-2">${horario.Cupos}</span></td>
+      <td class="px-4 py-3 text-center"><button class="btn btn-sm btn-outline-primary me-1" onclick="EditarCampos(${horario.id_Horario})">Editar</button></td>
+    </tr>`;
+  }
+
+  /* filtro.addEventListener("keyup",(event)=>{
+
+      
+      CargarHtmlHorarios();
+   })*/
+
+
+   /*variable global*/
+   var modalEditarHorario= new bootstrap.Modal(document.getElementById("modalMedico"))
+
+
+ async  function EditarCampos(IdHorario){
+    
+    const data=await fetch(`https://api-rest-ventas.onrender.com/api/Horario/${IdHorario}`)
+    const horario=await data.json();
+ 
+    const horarioFinal=horario[0]
+        document.getElementById("txtIdHorario").value=horarioFinal.id_Horario
+
+        document.getElementById("txtHorarioInicio").value=horarioFinal.HoraInicio
+        document.getElementById("txtHoraFin").value=horarioFinal.HoraFin
+        document.getElementById("txtCupos").value=horarioFinal.Cupos
+        document.getElementById("txtMedico").value=horarioFinal.Medico
+         document.getElementById("txtMedico").readOnly =true
+        const fechaInput = horarioFinal.FechaHorario
+        const fechaArray=fechaInput.split("T")
+        document.getElementById("txtHorarioAtencion").value=fechaArray[0]
+        /*mostrar el modal*/
+     modalEditarHorario.show();
+   }
+
+/*seuguna parte */ 
+
+var modalHorario=document.getElementById("modalHorario");
+
+var modalNuevoHorario= new bootstrap.Modal(modalHorario)
+function newNuevoHorario(event){
+
+     MostrarEspecialidad()
+    
+   modalNuevoHorario.show()
+    event.preventDefault();
+    
+
+}
+ 
+ async function MostrarEspecialidad(){
+
+      var result= await fetch("https://api-rest-ventas.onrender.com/api/Especialidades")
+      var especialidades=await result.json();
+      var cbEspecialidades=document.getElementById("especialidad")
+      cbEspecialidades.innerHTML=""
+       especialidades.forEach((especialidad)=>{
+                
+                const optionElement = document.createElement("option"); 
+                optionElement.value = especialidad.id_especialidad; 
+                optionElement.textContent = especialidad.Descripcion;
+                cbEspecialidades.appendChild(optionElement);
+      })
+    }
+    async function seleccionarMedico(event){
+        
+        var medicos=document.getElementById("cbMedicos")
+        medicos.innerHTML=""
+        let  cbEspecialidades=document.getElementById("especialidad")
+
+
+        var EspecialidadDescripcion=event.target.options[cbEspecialidades.selectedIndex].text
+        var IdEspecialidad=parseInt(event.target.value)
+        const response = await fetch(`https://api-rest-ventas.onrender.com/api/MedicosEspecialidad/${IdEspecialidad}`);
+        const medicosEspecialidad=await response.json();
+
+        
+         if(medicosEspecialidad.length>0) {
+             medicosEspecialidad.forEach((especialidad)=>{
+                
+                const optionElement = document.createElement("option"); 
+                optionElement.value = especialidad.id_medico; 
+                optionElement.textContent = `Dr ${especialidad.Apellidos},${especialidad.Nombres}`;
+                medicos.appendChild(optionElement);
+            })
+
+            }
+            else {
+
+                alert("No existe medicos para esta especialidad")
+            }
+            
+
+         event.preventDefault();
+    }
+
+  async function RegistrarHorario(){
+
+         var id_medico=document.getElementById("cbMedicos").value;
+        var FechaHorario =document.getElementById("fechaAtencion").value;
+        var Cupos =document.getElementById("Cupos").value;
+        var HoraInicio =document.getElementById("horaInicio").value;
+        var HoraFin =document.getElementById("horaFin").value;
+
+         const Horario={
+            id_medico,
+            FechaHorario,
+            Cupos,
+            HoraInicio,
+            HoraFin
+         }
+         
+            const response = await fetch("https://api-rest-ventas.onrender.com/api/Horario", {
+                method: "POST",
+                body: JSON.stringify(Horario),
+                headers: {
+                    "Content-Type": "application/json"
+                }   
+            });
+
+            const result = await response.json();
+            console.log("[RegistrarHorario] Resultado:", result)
+            if(result.id>0){
+                alert(result.mensaje)
+                Limpiar();
+                modalNuevoHorario.hide()
+                // Recargar datos sin interrumpir polling
+                setTimeout(() => { CargarHtmlHorarios(); }, 800);
+            }
+            else {
+                alert("Ingresar los datos correctamente")
+            }
+
+      
+    }
+
+    function Limpiar(){
+
+       document.getElementById("cbMedicos").value="";
+       document.getElementById("fechaAtencion").value="";
+       document.getElementById("Cupos").value="";
+       document.getElementById("horaInicio").value="";
+       document.getElementById("horaFin").value="";
+    }
+    /*enviando datos en formulario*/
+
+    function CrearHorarioMedico(event){
+
+         RegistrarHorario()
+        event.preventDefault();
+    }
+    
+    /*editar horario*/
+    async function GuardarCambios(event){
+            
+     var IdHorarioActualizar=document.getElementById("txtIdHorario").value
+       
+    
+    
+     var HorarioAtencion=document.getElementById("txtHorarioAtencion").value;
+     var HorarioInicio=document.getElementById("txtHorarioInicio").value;
+     var HorarioFin=document.getElementById("txtHoraFin").value;
+     var Cupos=document.getElementById("txtCupos").value
+
+     var newHorario={
+        HorarioAtencion,
+        HorarioInicio,
+        HorarioFin,
+        Cupos
+     }
+
+     var data=await fetch(`https://api-rest-ventas.onrender.com/api/Horario/${IdHorarioActualizar}`,{
+       method: "PUT",
+        body: JSON.stringify(newHorario),
+        headers: {
+            "Content-Type": "application/json"
+        }   
+     })
+
+    var resultUpdate=await data.json();
+     
+   
+       
+     if(resultUpdate.id>0){
+        alert(resultUpdate.mensaje)
+        modalEditarHorario.hide()
+        // Recargar datos sin interrumpir polling
+        setTimeout(() => { CargarHtmlHorarios(); }, 800);
+     }
+     else {
+        alert(resultUpdate.error)
+     }
+ 
+
+        event.preventDefault();
+    
+    }
+
+    
+
+ 
+  
+</script>
+
+<script>
+const origReg = window.RegistrarHorario;
+window.RegistrarHorario = async function() {
+  await origReg.call(this);
+  horariosAnterior = null;
+  setTimeout(async () => { await VerificarCambios(); }, 300);
+};
+
+const origSave = window.GuardarCambios;
+window.GuardarCambios = async function(event) {
+  await origSave.call(this, event);
+  horariosAnterior = null;
+  setTimeout(async () => { await VerificarCambios(); }, 300);
+};
+</script>
+    
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y" crossorigin="anonymous"></script>
+
+<footer class="site-footer">
+    <div class="container-footer">
+        <p>© 2026 Clínica Los Fresnos. Todos los derechos reservados.</p>
+    </div>
+</footer>
+</body>
+</html>

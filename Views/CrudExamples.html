@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modal Médico</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/Footer.css">
+</head>
+<body>
+
+<div class="container mt-5">
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalMedico">
+        Editar Médico
+    </button>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modalMedico">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            
+            <div class="modal-header">
+                <h5 class="modal-title">Editar Médico y Horarios</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            
+            <div class="modal-body">
+                <form>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">NOMBRE COMPLETO</label>
+                            <input type="text" class="form-control" value="Dr. Alejandro Vargas">
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">ESPECIALIDAD</label>
+                            <select class="form-select">
+                                <option>Cardiología</option>
+                                <option>Pediatría</option>
+                                <option>Traumatología</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">NÚMERO CMP</label>
+                            <input type="text" class="form-control" value="12456">
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">URL DE FOTO</label>
+                            <input type="text" class="form-control" value="https://multim.clinicalosfresno.com.p">
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <h6 class="mb-3">⏰ Configuración de Horario y Cupos</h6>
+                    
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">HORA INICIO</label>
+                            <input type="time" class="form-control" value="08:00">
+                        </div>
+                        
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">HORA FIN</label>
+                            <input type="time" class="form-control" value="13:00">
+                        </div>
+                        
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">CUPOS DIARIOS</label>
+                            <input type="number" class="form-control" value="10">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary">Guardar</button>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <footer class="site-footer">
+        <div class="container-footer">
+            <p>© 2026 Clínica Los Fresnos. Todos los derechos reservados.</p>
+        </div>
+        <script>
+            function goToHorarios(){
+                var p = window.location.pathname || '';
+                if(p.indexOf('/Views/') !== -1 || p.indexOf('\\Views\\') !== -1){
+                    window.location.href = 'HorariosMantenimiento.html';
+                } else {
+                    window.location.href = 'Views/HorariosMantenimiento.html';
+                }
+            }
+        </script>
+        <button class="footer-gear" onclick="goToHorarios()" title="Configuración">⚙️</button>
+    </footer>
+</body>
+</html>

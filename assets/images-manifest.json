@@ -1,0 +1,38 @@
+{
+  "LogoSinFondoHome": {
+    "url": "https://clinicalosfresnos.com.pe/wp-content/uploads/2024/01/LogoSinFondoHome.png",
+    "orig": "images\\LogoSinFondoHome.png",
+    "variants": [
+      {
+        "file": "images\\LogoSinFondoHome-180.webp",
+        "width": 180
+      },
+      {
+        "file": "images\\LogoSinFondoHome-360.webp",
+        "width": 360
+      },
+      {
+        "file": "images\\LogoSinFondoHome-720.webp",
+        "width": 720
+      }
+    ]
+  },
+  "IconoDoctor-1": {
+    "url": "https://multim.clinicalosfresnos.com.pe/wp-content/uploads/2025/12/IconoDoctor-1.png",
+    "orig": "images\\IconoDoctor-1.png",
+    "variants": [
+      {
+        "file": "images\\IconoDoctor-1-50.webp",
+        "width": 50
+      },
+      {
+        "file": "images\\IconoDoctor-1-100.webp",
+        "width": 100
+      },
+      {
+        "file": "images\\IconoDoctor-1-200.webp",
+        "width": 200
+      }
+    ]
+  }
+}

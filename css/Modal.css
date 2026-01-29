@@ -1,0 +1,42 @@
+
+
+.checkbox {
+    display: flex;  
+    align-items: center;
+    gap: 10px;
+    margin-top:15px;
+    color: #2c2c2c;;
+}
+
+.checkbox label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+.seguro {
+  position: relative;
+  width: 150px; /* Ajusta al ancho deseado */
+  margin: 6px 0;
+  margin-top: 15px;
+}
+
+.seguro select {
+  width: 100%;
+
+}
+
+/* Icono Particular por defecto */
+.input-group select option[value="particular"]::before {
+  content: "⭐"; /* O usa tu SVG como background */
+  margin-right: 8px;
+  font-size: 18px;
+}
+
+/* Hover y focus */

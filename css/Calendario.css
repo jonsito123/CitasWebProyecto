@@ -1,0 +1,176 @@
+.calendario {
+    width: 100%;
+    max-width: 350px;
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.calendario-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+.calendario-header button {
+    background-color: transparent;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+}
+
+#month-year {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.calendar-weekdays,
+.dias-calendario {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+
+.calendar-weekdays div,
+.dias-calendario div {
+    text-align: center;
+    padding: 10px;
+}
+
+.calendar-weekdays {
+    background-color: #eaeef3;
+}
+
+.calendar-weekdays div {
+    font-weight: bold;
+}
+
+.dias-calendario div {
+    border-bottom: 1px solid #eaeef3;
+    cursor: pointer;
+}
+
+.dias-calendario div:hover {
+    background-color: #f1f1f1;
+}
+
+/* Días en el pasado: deshabilitados */
+.dias-calendario div.past {
+  opacity: 0.45;
+  pointer-events: none;
+  cursor: default;
+  background: transparent;
+  color: #999;
+}
+
+/* Estado para días con horarios disponibles */
+.dias-calendario div.available {
+    background-color: #4CAF50;
+    color: #ffffff;
+    font-weight: bold;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(76, 175, 80, 0.25);
+    transform: scale(1.03);
+    cursor: pointer;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+/* Estado para el día actualmente seleccionado */
+.dias-calendario div.selected {
+    background-color: #1565C0 !important;
+    color: #ffffff !important;
+    box-shadow: 0 6px 14px rgba(21, 101, 192, 0.28) !important;
+    transform: scale(1.06) !important;
+}
+
+@media (max-width: 480px) {
+  
+   .calendario {
+    max-width: 100%;
+    margin:0 auto;
+  }
+  .calendario-header {
+    padding: 8px;
+  }
+  
+  .calendario-header button {
+    font-size: 1.2em;
+    padding: 3px 8px;
+  }
+  
+  #month-year {
+    font-size: 1em;
+  }
+  
+  .calendar-weekdays div, .dias-calendario div {
+    padding: 8px 4px;
+    font-size: 0.9em;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .schedule-container {
+    padding: 5px;
+   
+  }
+  
+  .calendario {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+  
+  .calendario-header {
+    padding: 2px;
+  }
+  
+  .calendario-header button {
+    font-size: 1.2em;
+    padding: 3px 6px;
+  }
+  
+  #month-year {
+    font-size: 1em;
+  }
+  
+  .calendar-weekdays div, .dias-calendario div {
+    padding:3px 3px;
+    font-size: 0.9em;
+  }
+}
+
+/* Para pantallas muy pequeñas */
+@media screen and (max-width: 360px) {
+  .calendar-weekdays div, .dias-calendario div {
+    padding: 6px 2px;
+    font-size: 0.85em;
+  }
+  
+  .calendario-header button {
+    font-size: 1em;
+  }
+  
+  #month-year {
+    font-size: 0.9em;
+  }
+
+}
+
+@media (max-width:360px) {
+ 
+
+    .doctor-horarios {
+        display: grid;
+        grid-template-columns: 1fr;
+
+    }
+    .schedule-container {
+        text-align: center;
+        width: 100%;
+        padding: 0 5px;      
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+   
+
+ }

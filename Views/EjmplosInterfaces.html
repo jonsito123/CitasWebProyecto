@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendario de Citas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .patient-info {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: #f8f9ff;
+            border-radius: 10px;
+        }
+        
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            color: white;
+        }
+        
+        .calendar-header button {
+            background: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #667eea;
+            transition: transform 0.2s;
+        }
+        
+        .calendar-header button:hover {
+            transform: scale(1.05);
+        }
+        
+        .calendar-header h2 {
+            font-size: 24px;
+        }
+        
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .day-header {
+            text-align: center;
+            font-weight: bold;
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 5px;
+            color: #333;
+        }
+        
+        .day {
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+            position: relative;
+        }
+        
+        .day:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .day.other-month {
+            color: #ccc;
+            background: #fafafa;
+        }
+        
+        .day.today {
+            border-color: #ff6b6b;
+            background: #fff5f5;
+        }
+        
+        .day.has-appointment {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .day.has-appointment:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.5);
+        }
+        
+        .day-number {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .appointment-time {
+            font-size: 11px;
+            opacity: 0.9;
+        }
+        
+        .appointment-details {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        .appointment-details h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .appointment-list {
+            list-style: none;
+        }
+        
+        .appointment-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            background: white;
+            border-left: 4px solid #667eea;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .appointment-item strong {
+            color: #667eea;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 30px;
+            gap: 15px;
+        }
+        
+        .stat-card {
+            flex: 1;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stat-card h4 {
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+        
+        .stat-card .number {
+            font-size: 32px;
+            font-weight: bold;
+        }
+    </style>
+    <link rel="stylesheet" href="../css/Footer.css">
+</head>
+<body>
+    <div class="container">
+        <h1>📅 Calendario de Citas Médicas</h1>
+        <div class="patient-info">
+            <strong>Paciente:</strong> <span id="patientName">María González López</span><br>
+            <strong>ID:</strong> <span id="patientId">PAC-2025-001</span>
+        </div>
+        
+        <div class="calendar-header">
+            <button onclick="previousMonth()">◀ Anterior</button>
+            <h2 id="monthYear"></h2>
+            <button onclick="nextMonth()">Siguiente ▶</button>
+        </div>
+        
+        <div class="calendar-grid" id="calendar"></div>
+        
+        <div class="appointment-details">
+            <h3>🗓️ Próximas Citas del Mes</h3>
+            <ul class="appointment-list" id="appointmentList"></ul>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <h4>Total Citas</h4>
+                <div class="number" id="totalAppointments">0</div>
+            </div>
+            <div class="stat-card">
+                <h4>Este Mes</h4>
+                <div class="number" id="monthAppointments">0</div>
+            </div>
+            <div class="stat-card">
+                <h4>Completadas</h4>
+                <div class="number" id="completedAppointments">0</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Datos de ejemplo de citas del paciente
+        const appointments = [
+            { date: '2025-12-16', time: '09:00', type: 'Consulta General', doctor: 'Dr. Ramírez' },
+            { date: '2025-12-18', time: '14:30', type: 'Análisis de Sangre', doctor: 'Lab. Central' },
+            { date: '2025-12-20', time: '10:00', type: 'Seguimiento', doctor: 'Dr. Ramírez' },
+            { date: '2025-12-23', time: '11:00', type: 'Radiografía', doctor: 'Dr. Torres' },
+            { date: '2025-12-27', time: '15:00', type: 'Consulta Especialista', doctor: 'Dra. Mendoza' },
+            { date: '2026-01-08', time: '09:30', type: 'Control Mensual', doctor: 'Dr. Ramírez' },
+            { date: '2026-01-15', time: '16:00', type: 'Terapia Física', doctor: 'Lic. Vargas' },
+            { date: '2026-01-22', time: '10:30', type: 'Consulta General', doctor: 'Dr. Ramírez' }
+        ];
+
+        let currentDate = new Date();
+        const today = new Date();
+
+        function renderCalendar() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            
+            // Actualizar título
+            const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                              'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+            document.getElementById('monthYear').textContent = `${monthNames[month]} ${year}`;
+            
+            // Limpiar calendario
+            const calendar = document.getElementById('calendar');
+            calendar.innerHTML = '';
+            
+            // Agregar encabezados de días
+            const dayHeaders = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+            dayHeaders.forEach(day => {
+                const header = document.createElement('div');
+                header.className = 'day-header';
+                header.textContent = day;
+                calendar.appendChild(header);
+            });
+            
+            // Primer día del mes
+            const firstDay = new Date(year, month, 1).getDay();
+            
+            // Días del mes anterior
+            const prevMonthDays = new Date(year, month, 0).getDate();
+            for (let i = firstDay - 1; i >= 0; i--) {
+                const day = createDayElement(prevMonthDays - i, true, year, month - 1);
+                calendar.appendChild(day);
+            }
+            
+            // Días del mes actual
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            for (let i = 1; i <= daysInMonth; i++) {
+                const day = createDayElement(i, false, year, month);
+                calendar.appendChild(day);
+            }
+            
+            // Días del mes siguiente
+            const remainingDays = 42 - (firstDay + daysInMonth);
+            for (let i = 1; i <= remainingDays; i++) {
+                const day = createDayElement(i, true, year, month + 1);
+                calendar.appendChild(day);
+            }
+            
+            updateAppointmentList();
+            updateStats();
+        }
+
+        function createDayElement(dayNumber, isOtherMonth, year, month) {
+            const div = document.createElement('div');
+            div.className = 'day';
+            if (isOtherMonth) div.classList.add('other-month');
+            
+            const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(dayNumber).padStart(2, '0')}`;
+            
+            // Verificar si es hoy
+            const checkDate = new Date(year, month, dayNumber);
+            if (checkDate.toDateString() === today.toDateString()) {
+                div.classList.add('today');
+            }
+            
+            // Verificar si hay cita
+            const appointment = appointments.find(apt => apt.date === dateStr);
+            
+            const dayNum = document.createElement('div');
+            dayNum.className = 'day-number';
+            dayNum.textContent = dayNumber;
+            div.appendChild(dayNum);
+            
+            if (appointment) {
+                div.classList.add('has-appointment');
+                const time = document.createElement('div');
+                time.className = 'appointment-time';
+                time.textContent = appointment.time;
+                div.appendChild(time);
+                
+                div.onclick = () => {
+                    alert(`📋 Cita: ${appointment.type}\n⏰ Hora: ${appointment.time}\n👨‍⚕️ ${appointment.doctor}`);
+                };
+            }
+            
+            return div;
+        }
+
+        function updateAppointmentList() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            const list = document.getElementById('appointmentList');
+            list.innerHTML = '';
+            
+            const monthAppointments = appointments.filter(apt => {
+                const aptDate = new Date(apt.date);
+                return aptDate.getMonth() === month && aptDate.getFullYear() === year;
+            }).sort((a, b) => new Date(a.date) - new Date(b.date));
+            
+            if (monthAppointments.length === 0) {
+                list.innerHTML = '<li class="appointment-item">No hay citas programadas este mes</li>';
+                return;
+            }
+            
+            monthAppointments.forEach(apt => {
+                const li = document.createElement('li');
+                li.className = 'appointment-item';
+                const date = new Date(apt.date);
+                const dateStr = date.toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+                li.innerHTML = `
+                    <strong>${dateStr}</strong>
+                    🕐 ${apt.time} - ${apt.type}<br>
+                    👨‍⚕️ ${apt.doctor}
+                `;
+                list.appendChild(li);
+            });
+        }
+
+        function updateStats() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            
+            const monthAppointments = appointments.filter(apt => {
+                const aptDate = new Date(apt.date);
+                return aptDate.getMonth() === month && aptDate.getFullYear() === year;
+            });
+            
+            const pastAppointments = appointments.filter(apt => {
+                return new Date(apt.date) < today;
+            });
+            
+            document.getElementById('totalAppointments').textContent = appointments.length;
+            document.getElementById('monthAppointments').textContent = monthAppointments.length;
+            document.getElementById('completedAppointments').textContent = pastAppointments.length;
+        }
+
+        function previousMonth() {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            renderCalendar();
+        }
+
+        function nextMonth() {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar();
+        }
+
+        // Inicializar calendario
+        renderCalendar();
+    </script>
+    <footer class="site-footer">
+        <div class="container-footer">
+            <p>© 2026 Clínica Los Fresnos. Todos los derechos reservados.</p>
+        </div>
+        <script>
+            function goToHorarios(){
+                var p = window.location.pathname || '';
+                if(p.indexOf('/Views/') !== -1 || p.indexOf('\\Views\\') !== -1){
+                    window.location.href = 'HorariosMantenimiento.html';
+                } else {
+                    window.location.href = 'Views/HorariosMantenimiento.html';
+                }
+            }
+        </script>
+        <button class="footer-gear" onclick="goToHorarios()" title="Configuración">⚙️</button>
+    </footer>
+</body>
+</html>

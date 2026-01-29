@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Citas</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 500px; margin: 50px auto; padding: 20px; }
+        label { display: block; margin-top: 15px; font-weight: bold; }
+        input, select { width: 100%; padding: 10px; margin-top: 5px; box-sizing: border-box; }
+        button { background: #007bff; color: white; padding: 12px; border: none; width: 100%; margin-top: 20px; cursor: pointer; font-size: 16px; }
+        button:hover { background: #0056b3; }
+    </style>
+        <link rel="stylesheet" href="../css/Footer.css">
+</head>
+<body onload="Cargar(event)">
+    <h1>Formulario para Reservar Cita</h1>
+    <form id="formularioCitas" onsubmit="gurdarCitas(event)">
+        <label for="nombres">Nombres:</label>
+        <input type="text" id="nombres" name="nombres" required>
+
+        <label for="apellidos">Apellidos:</label>
+        <input type="text" id="apellidos" name="apellidos" required>
+
+         <label for="telefono">Teléfono:</label>
+        <input type="tel" id="telefono" name="telefono"  pattern="[0-9]+" title="Ingrese un teléfono válido" required>
+        
+        <label for="dni">DNI:</label>
+        <input type="text" id="dni" name="dni" maxlength="8" pattern="\d{8}" title="DNI debe tener 8 dígitos" required>
+
+        <label for="FechaCita">Especialidades</label>
+        <select id="cbEspecialidades" name="cbEspecialidades"  onchange="seleccionar(event)">
+ 
+        </select>
+         <label for="Medico">Medico:</label>
+        <select id="cbMedico" name="cbMedico" required>
+            
+        </select>
+        <label for="turno">Turno:</label>
+        <select id="turno" name="turno" required>
+            <option value="">Seleccione un turno</option>
+            <option value="1">Mañana</option>
+            <option value="2">Tarde</option>
+            <option value="3">Noche</option>
+        </select>
+       
+         <label for="FechaCita">FechaCita</label>
+        <input id="FechaCita" name="FechaCita"  type="date"/>
+
+        <button type="submit">Reservar Cita</button>
+    </form>
+
+    <script>
+         function gurdarCitas(event) {
+            event.preventDefault();
+         
+         var nombres=document.getElementById("nombres").value;
+         var apellidos=document.getElementById("apellidos").value;
+         var dni=document.getElementById("dni").value;
+         var telefono=document.getElementById("telefono").value;
+         var turno=document.getElementById("turno").value;
+         var FechaCita=document.getElementById("FechaCita").value;
+
+
+
+    
+
+          var cuerpo={
+            "Nombres":nombres,
+            "Apellidos":apellidos,
+            "Dni":dni,
+            "Telefono":telefono,
+            "Turno":turno,
+            "FechaCita":FechaCita
+          };
+          
+          var json=JSON.stringify(cuerpo);
+          
+
+        fetch("https://restapicitas-production.up.railway.app/api/Citas",{
+            method:"POST",
+            body:json,
+            headers:{
+                "Content-Type": "application/json"
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+         
+
+            if(data.id>0){
+
+                alert("Su cita ha sido creada correctamente")
+                 LimpiarData()
+            }
+            
+              
+        });
+
+        function LimpiarData(){
+
+        document.getElementById("nombres").value="";
+        document.getElementById("apellidos").value="";
+        document.getElementById("dni").value="";
+        document.getElementById("telefono").value="";
+        document.getElementById("turno").value="";
+        }
+                
+        }
+    function Cargar(e){
+
+
+        var cbEspecialidades=document.getElementById("cbEspecialidades")
+        
+        cbEspecialidades.innerHTML=""
+        fetch("http://localhost:5000/api/Especialidades")
+           
+        .then(response => response.json())
+        .then(data => {
+            data.forEach((especialidad)=>{
+                
+                const optionElement = document.createElement("option"); 
+                optionElement.value = especialidad.id_especialidad; 
+                optionElement.textContent = especialidad.Descripcion;
+                cbEspecialidades.appendChild(optionElement);
+            })
+        })
+     
+       e.preventDefault();
+
+    }
+
+    function seleccionar(event){
+
+        var medicos=document.getElementById("cbMedico")
+        var id_especialidad=parseInt(event.target.value)
+         medicos.innerHTML=""
+         fetch(`http://localhost:5000/api/Medicos/${id_especialidad}`)
+           
+        .then(response => response.json())
+        .then(data => {
+
+            if(data.length>0) {
+             data.forEach((especialidad)=>{
+                
+                const optionElement = document.createElement("option"); 
+                optionElement.value = especialidad.id_medico; 
+                optionElement.textContent = especialidad.Nombres;
+                medicos.appendChild(optionElement);
+            })
+
+            }
+            else {
+
+                alert("No existe medicos para esta especialidad")
+            }
+            
+        })
+     
+        
+        event.preventDefault();
+    }
+    </script>
+        <footer class="site-footer">
+            <div class="container-footer">
+                <p>© 2026 Clínica Los Fresnos. Todos los derechos reservados.</p>
+            </div>
+            <script>
+                function goToHorarios(){
+                    var p = window.location.pathname || '';
+                    if(p.indexOf('/Views/') !== -1 || p.indexOf('\\Views\\') !== -1){
+                        window.location.href = 'HorariosMantenimiento.html';
+                    } else {
+                        window.location.href = 'Views/HorariosMantenimiento.html';
+                    }
+                }
+            </script>
+            <button class="footer-gear" onclick="goToHorarios()" title="Configuración">⚙️</button>
+        </footer>
+    </body>
+    </html>

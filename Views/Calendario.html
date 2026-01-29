@@ -1,0 +1,52 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendario</title>
+    <link rel="stylesheet" href="../css/Calendario.css">
+    <link rel="stylesheet" href="../css/Footer.css">
+</head>
+<body>
+    
+    <div class="calendario">
+        <div class="calendario-header">
+            <button id="anterior-mes">‹</button>
+            <button id="siguiente-año"></button>
+            <button id="siguiente-mes">›</button>
+
+        </div>
+        <div class="calendario-cuerpo">
+            <div class="calendar-weekdays">
+            
+            </div>
+            <div class="dias-calendario">
+            
+            </div>
+
+        </div>
+    </div>
+
+<script>
+
+
+    /*declaracion de variables*/
+
+</script>
+    <footer class="site-footer">
+        <div class="container-footer">
+            <p>© 2026 Clínica Los Fresnos. Todos los derechos reservados.</p>
+        </div>
+        <script>
+            function goToHorarios(){
+                var p = window.location.pathname || '';
+                if(p.indexOf('/Views/') !== -1 || p.indexOf('\\Views\\') !== -1){
+                    window.location.href = 'HorariosMantenimiento.html';
+                } else {
+                    window.location.href = 'Views/HorariosMantenimiento.html';
+                }
+            }
+        </script>
+        <button class="footer-gear" onclick="goToHorarios()" title="Configuración">⚙️</button>
+    </footer>
+</body>
+</html>
