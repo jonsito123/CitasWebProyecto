@@ -44,7 +44,7 @@
 
 /*poltiicas*/
 
-.mensaje-politicas{
+/* .mensaje-politicas{
     position: absolute;
     background-color: #F9F3D6;
     border-radius: 2px solid;
@@ -64,4 +64,19 @@
     left: 10px;
     border: 5px solid transparent;
     border-bottom-color: #333;
+} */
+
+.link-politicas {
+
+    text-decoration: none;
+    color: #2c2c2c;
+    font-weight: bold;
+}
+.terminos-condiciones {
+    margin-top: 10px;
+    display:grid;
+    grid-template-columns: 5% 95%;
+    gap: 10px;
+    font-size: 14px;
+
 }
